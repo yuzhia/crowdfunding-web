@@ -8,21 +8,19 @@ NProgress.configure({ showSpinner: false })
 
 const whiteList = ['as']
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async to => {
   NProgress.start()
   useTitle((to.meta.title as string) || '微筹')
   const userStore = useUserStore()
   const token = userStore.token
-  const userInfo = userStore.user
 
   // 需要登录，没有token
   if (to.meta.requireLogin && !token) {
-    return { name: 'login' }
+    return { path: 'login', query: { ...to.query, redirect: to.path } }
   }
-  if (to.meta.requireLogin && token) {
-    if (!userInfo.id) {
-      userStore.getUserInfo()
-    }
+  // 有token
+  if (token && to.path === '/login') {
+    return { path: '/' }
   }
   NProgress.done()
 })

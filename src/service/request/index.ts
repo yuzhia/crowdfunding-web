@@ -87,7 +87,7 @@ class RequestHttp {
       },
       (error: AxiosError) => {
         const { response } = error
-        console.log('response: ', response)
+        console.log('进error: ', response)
         if (response) {
           this.handleCode(response.status)
         }

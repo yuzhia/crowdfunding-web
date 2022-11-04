@@ -49,6 +49,14 @@ export default [
         component: () => import('@/views/success.vue')
       },
       {
+        path: '/upload',
+        name: 'upload',
+        meta: {
+          title: '上传'
+        },
+        component: () => import('@/views/upload.vue')
+      },
+      {
         path: '/initiate/:id',
         name: 'initiate',
         component: () => import('@/views/initiate/index.vue'),
@@ -91,6 +99,9 @@ export default [
       {
         path: '/profile',
         component: () => import('@/views/profile/index.vue'),
+        meta: {
+          requireLogin: true
+        },
         children: [
           {
             path: '',

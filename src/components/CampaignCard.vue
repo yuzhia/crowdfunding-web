@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getPercent, timeDifference, getStatus } from '@/utils'
 const router = useRouter()
 
 defineProps<{
@@ -34,10 +35,10 @@ defineProps<{
         </n-button>
       </div>
       <div>
-        <span>{{ campaign.supportMoney }}</span>
+        <span>{{ campaign.collectedFunds }}</span>
         <n-progress
           type="line"
-          :percentage="60"
+          :percentage="getPercent(campaign.collectedFunds, campaign.goal)"
           :indicator-placement="'inside'"
           processing
         />
@@ -45,20 +46,19 @@ defineProps<{
       <div class="flex justify-between">
         <div>
           <i-el-group
-            class="inline-block align-middle mr-1 text-xl text-green-600"
+            class="inline-block align-middle mr-1 text-lg text-green-600"
           />
-          <span class="align-middle">63个支持者</span>
+          <span class="align-middle">{{ campaign.totalBackers }} 个支持者</span>
         </div>
-        <div>
+
+        <div class="flex items-center gap-1">
           <i-mdi-clock-time-eight
             class="inline-block align-middle text-gray-400"
           />
-          <n-time
-            :time="0"
-            :to="86400000"
-            type="relative"
-            class="align-middle ml-1"
-          />
+          <div v-if="campaign.status != 'underway'">
+            {{ getStatus(campaign.status) }}
+          </div>
+          <div v-else>还剩 {{ timeDifference(campaign.endTime as Date) }}</div>
         </div>
       </div>
     </div>

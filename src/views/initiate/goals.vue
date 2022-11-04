@@ -27,7 +27,7 @@ const campaign = inject('campaign') as Ref<ICampaign>
             你想为这次竞选筹集多少资金？你的货币最低目标是1000元。有关选择目标金额的帮助，请咨询管理员。请务必记住我们的费用和您的预留资金。
           </p>
           <n-input-number
-            v-model:value="campaign.money"
+            v-model:value="campaign.goal"
             :show-button="false"
             :min="1000"
           >

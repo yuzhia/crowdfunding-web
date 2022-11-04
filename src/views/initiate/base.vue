@@ -54,8 +54,15 @@ if (campaign.value.coverUrl) {
   })
 }
 
+// const imageList = campaign.value.coverUrl ? [campaign.value.coverUrl] : []
+// const uploadRef = ref()
+
 const handleClick = () => {
-  console.log(campaign?.value)
+  // const fileList = uploadRef.value.fileList
+  // if (fileList) {
+  //   console.log(fileList[0])
+  //   console.log(fileList[0]?.url)
+  // }
 }
 </script>
 
@@ -97,6 +104,7 @@ const handleClick = () => {
           图片应简洁清晰，除 Logo
           外的其他文字要精练，说明产品亮点即可。好的项目图会为项目带来更多流量。
         </p>
+        <!-- <upload ref="uploadRef" :image-list="imageList" /> -->
         <n-upload
           v-model:default-file-list="fileList"
           :max="1"
@@ -134,7 +142,7 @@ const handleClick = () => {
           您有资格一次性延长60天的最长期限。
         </p>
         <n-input-number
-          v-model:value="campaign.day"
+          v-model:value="campaign.duration"
           :show-button="false"
           class="w-20"
           :min="1"

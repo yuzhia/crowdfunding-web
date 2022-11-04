@@ -29,22 +29,22 @@ interface ICampaign {
   id?: number
   title: string
   description: string
-  money?: number
+  goal?: number
   coverUrl: string
   categoryId?: number
   status: string
   story: string
-  day?: number
+  duration?: number
   createTime?: string
   faqs: IFaq[]
   assets: Array<IAsset>
   perks: Array<IPerk>
   user?: IUser
   count?: number
-  supportMoney?: number
-  supporter?: number
-  money?: number
+  collectedFunds?: number
+  totalBackers?: number
   remainDay?: number
+  endTime?: Date
 }
 
 interface IPage {

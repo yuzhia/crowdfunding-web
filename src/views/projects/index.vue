@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getPercent, timeDifference, getStatus } from '@/utils'
 import { getCampaign } from '@/service'
 import Comment from './Comment.vue'
 import MdEditor from 'md-editor-v3'
@@ -48,11 +49,11 @@ const splitDate = (date: any) => {
         :default-index="0"
         class="shrink-0 w-full h-[274px] md:flex-1 lg:w-[695px] md:h-full"
       >
-        <img
+        <!-- <img
           v-if="campaign?.assets.length == 0"
           src="@/assets/img/missing_project_photo.avif"
           class="w-full h-[460px] object-cover"
-        />
+        /> -->
         <iframe
           v-for="(item, index) in videoAssets"
           :key="index"
@@ -81,11 +82,11 @@ const splitDate = (date: any) => {
 
         <template #arrow="{ to }">
           <div class="flex w-full h-12 gap-x-2 mt-4 justify-center">
-            <img
+            <!-- <img
               v-if="campaign?.assets.length == 0"
               src="@/assets/img/missing_project_photo.avif"
               class="cursor-pointer w-12 h-full"
-            />
+            /> -->
             <img
               v-for="(item, index) in videoAssets"
               :key="item.id"
@@ -113,7 +114,9 @@ const splitDate = (date: any) => {
         class="flex flex-col break-all space-y-3 flex-1 pb-16 px-4 mt-2 md:mt-0"
       >
         <!-- 状态 -->
-        <div class="text-sm font-semibold text-[#088366]">FUNDING</div>
+        <div class="text-sm font-semibold text-[#088366]">
+          {{ getStatus(campaign.status) }}
+        </div>
         <!-- 标题 -->
         <div class="text-3xl font-semibold">
           {{ campaign.title ? campaign.title : '默认标题' }}
@@ -144,13 +147,13 @@ const splitDate = (date: any) => {
             <span>
               已筹
               <span class="text-xl font-semibold"
-                >￥{{ campaign.supportMoney }}</span
+                >￥{{ campaign.collectedFunds }}</span
               >
             </span>
             <div>
               <i-el-group class="inline-block mr-2 text-xl text-green-600" />
               <span class="align-middle">
-                <span class="font-semibold">{{ campaign.supporter }}</span>
+                <span class="font-semibold">{{ campaign.totalBackers }}</span>
                 支持者
               </span>
             </div>
@@ -158,23 +161,20 @@ const splitDate = (date: any) => {
           <n-progress
             type="line"
             status="success"
-            :percentage="
-              campaign.money
-                ? (campaign.supportMoney as number  / campaign.money) * 100
-                : 0
-            "
+            :percentage="getPercent(campaign.collectedFunds, campaign.goal)"
             :indicator-placement="'inside'"
             class="py-2"
           />
           <div class="flex justify-between items-center">
             <span>
               目标金额
-              <span class="font-semibold">￥{{ campaign.money }}</span>
+              <span class="font-semibold">￥{{ campaign.goal }}</span>
             </span>
-            <span>
+            <span v-if="campaign.status == 'underway'">
               还剩
-              <span class="font-semibold">{{ campaign.remainDay }}</span>
-              天
+              <span class="font-semibold">{{
+                timeDifference(campaign.endTime as Date)
+              }}</span>
             </span>
           </div>
         </div>
