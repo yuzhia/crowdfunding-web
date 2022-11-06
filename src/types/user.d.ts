@@ -3,7 +3,7 @@ interface IUser {
   username: string
   email: string
   urls: string
-  avatar: string
+  avatar?: string
 }
 
 interface ILoginReq {

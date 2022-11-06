@@ -1,0 +1,1 @@
+getExt('image/jpeg')

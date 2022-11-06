@@ -1,10 +1,9 @@
 <script setup name="detail" lang="ts">
-import { imageUpload } from '@/service'
-import { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 import Faq from './Faq.vue'
 import Story from './Story.vue'
 
 import { Ref } from 'vue'
+import { UploadFileInfo } from 'naive-ui'
 
 const campaign = inject('campaign') as Ref<ICampaign>
 
@@ -19,17 +18,29 @@ imageLinkList.value = campaign.value.assets.filter(
   asset => asset.type == 'IMAGE'
 )
 
-const fileList = ref<UploadFileInfo[]>([])
+const urls = ref<Array<string>>([])
 
-// 回显
-imageLinkList.value.forEach(item => {
-  fileList.value?.push({
-    id: item.id + '',
-    name: 'a',
-    url: item.url,
-    status: 'finished'
-  })
+onMounted(() => {
+  if (imageLinkList.value.length !== 0) {
+    imageLinkList.value.forEach(item => {
+      urls.value?.push(item.url)
+    })
+  }
 })
+
+const updateVal = (file: UploadFileInfo) => {
+  if (file.status == 'finished') {
+    imageLinkList.value.push({
+      type: 'IMAGE',
+      url: file.url as string,
+      campaignId: campaign.value.id as number
+    })
+  } else {
+    imageLinkList.value = imageLinkList.value.filter(
+      item => item.url != file.url
+    )
+  }
+}
 
 watchEffect(() => {
   campaign.value.assets = [...videoLinkList.value, ...imageLinkList.value]
@@ -45,47 +56,6 @@ const addItem = () => {
 }
 const removeVideo = (index: number) => {
   videoLinkList.value.splice(index, 1)
-}
-
-const customRequest = ({
-  file,
-  onFinish,
-  onError
-}: UploadCustomRequestOptions) => {
-  const formData = new FormData()
-  formData.append('file', file.file as File)
-  imageUpload(formData)
-    .then(res => {
-      if (res.code === 0) {
-        imageLinkList.value.push({
-          fileId: file.id,
-          url: res.data.fullFilePath,
-          type: 'IMAGE',
-          campaignId: campaign.value.id as number
-        })
-        window.$message.success('上传成功！')
-        onFinish()
-      }
-    })
-    .catch(error => {
-      window.$message.error(error.msg)
-      onError()
-    })
-}
-
-const removeImg = (options: {
-  file: UploadFileInfo
-  fileList: Array<UploadFileInfo>
-}) => {
-  if (!options.file.url) {
-    imageLinkList.value = imageLinkList.value.filter(
-      item => item.fileId !== options.file.id
-    )
-  } else {
-    imageLinkList.value = imageLinkList.value.filter(
-      item => item.id !== Number(options.file.id)
-    )
-  }
 }
 </script>
 
@@ -124,14 +94,7 @@ const removeImg = (options: {
             </div>
           </n-tab-pane>
           <n-tab-pane name="image" tab="图片" display-directive="show">
-            <!-- <my-upload v-model:image-list="imageLinkList" :max="5"></my-upload> -->
-            <n-upload
-              v-model:default-file-list="fileList"
-              :max="10"
-              list-type="image-card"
-              :custom-request="customRequest"
-              @remove="removeImg"
-            />
+            <CosUpload :max="10" :urls="urls" @update-val="updateVal" />
           </n-tab-pane>
         </n-tabs>
       </n-form-item>

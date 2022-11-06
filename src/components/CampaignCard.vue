@@ -55,7 +55,7 @@ defineProps<{
           <i-mdi-clock-time-eight
             class="inline-block align-middle text-gray-400"
           />
-          <div v-if="campaign.status != 'underway'">
+          <div v-if="campaign.status != '已发布'">
             {{ getStatus(campaign.status) }}
           </div>
           <div v-else>还剩 {{ timeDifference(campaign.endTime as Date) }}</div>

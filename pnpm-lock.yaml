@@ -10,6 +10,7 @@ specifiers:
   '@vueuse/core': ^9.2.0
   autoprefixer: ^10.4.12
   axios: ^0.27.2
+  cos-js-sdk-v5: ^1.4.10
   eslint: ^8.23.1
   eslint-config-prettier: ^8.5.0
   eslint-plugin-prettier: ^4.2.1
@@ -17,6 +18,7 @@ specifiers:
   js-cookie: ^3.0.1
   md-editor-v3: ^2.3.0
   naive-ui: ^2.33.5
+  nanoid: ^4.0.0
   nprogress: ^0.2.0
   pinia: ^2.0.22
   pinia-plugin-persistedstate: ^2.2.0
@@ -37,8 +39,10 @@ specifiers:
 dependencies:
   '@vueuse/core': 9.2.0_vue@3.2.39
   axios: 0.27.2
+  cos-js-sdk-v5: 1.4.10
   js-cookie: 3.0.1
   md-editor-v3: 2.3.0
+  nanoid: 4.0.0
   nprogress: 0.2.0
   pinia: 2.0.22_arz4dztosvwy2ghjrlh2wdhejm
   pinia-plugin-persistedstate: 2.2.0_pinia@2.0.22
@@ -559,6 +563,11 @@ packages:
       - '@vue/composition-api'
       - vue
 
+  /@xmldom/xmldom/0.8.5:
+    resolution: {integrity: sha512-0dpjDLeCXYThL2YhqZcd/spuwoH+dmnFoND9ZxZkAYxp1IJUB2GP16ow2MJRsjVxy8j1Qv8BJRmN5GKnbDKCmQ==}
+    engines: {node: '>=10.0.0'}
+    dev: false
+
   /acorn-jsx/5.3.2_acorn@8.8.0:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -813,6 +822,12 @@ packages:
       tslib: 2.4.0
       upper-case: 2.0.2
     dev: true
+
+  /cos-js-sdk-v5/1.4.10:
+    resolution: {integrity: sha512-GPW3/x6WS0fQFFsMSrf2nq5LYbrFbi3lnOAzpGMAvnmLcItUhjvk/Xln1pGMBgk65U5k8rMP0I97QEIsIFhWFQ==}
+    dependencies:
+      '@xmldom/xmldom': 0.8.5
+    dev: false
 
   /cross-spawn/7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -1813,6 +1828,12 @@ packages:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /nanoid/4.0.0:
+    resolution: {integrity: sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}

@@ -8,6 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CampaignCard: typeof import('./src/components/CampaignCard.vue')['default']
+    CosUpload: typeof import('./src/components/CosUpload.vue')['default']
     HeaderAvatar: typeof import('./src/components/HeaderAvatar.vue')['default']
     IAntDesignLikeFilled: typeof import('~icons/ant-design/like-filled')['default']
     IAntDesignMessageFilled: typeof import('~icons/ant-design/message-filled')['default']
@@ -63,6 +64,5 @@ declare module '@vue/runtime-core' {
     NUpload: typeof import('naive-ui')['NUpload']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Upload: typeof import('./src/components/Upload.vue')['default']
   }
 }

@@ -15,6 +15,7 @@ const listData = (data: IPage) => {
     if (res.data.length === 0) {
       btnShow.value = false
     }
+    console.log(res)
     campaigns.value.push(...res.data)
   })
 }

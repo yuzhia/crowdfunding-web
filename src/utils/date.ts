@@ -27,3 +27,15 @@ export const timeDifference = (endTime: Date) => {
 
   return 0
 }
+
+export const getYearMonth = () => {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth()
+
+  let m = (month + 1).toString()
+  if (m.length == 1) {
+    m = '0' + m
+  }
+  return year + '-' + m
+}

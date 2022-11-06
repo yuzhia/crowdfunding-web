@@ -49,14 +49,6 @@ export default [
         component: () => import('@/views/success.vue')
       },
       {
-        path: '/upload',
-        name: 'upload',
-        meta: {
-          title: '上传'
-        },
-        component: () => import('@/views/upload.vue')
-      },
-      {
         path: '/initiate/:id',
         name: 'initiate',
         component: () => import('@/views/initiate/index.vue'),

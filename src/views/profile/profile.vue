@@ -7,12 +7,13 @@ const userStore = useUserStore()
 
 const website = ref<Array<string>>([])
 
-const user = userStore.user
+const user = { ...useUserStore().user }
+const newUser = ref(user)
 const errMsg = ref<Array<string>>([])
 
 const saveChange = () => {
   errMsg.value = []
-  if (user.username.length < 2 || user.username.length > 2) {
+  if (newUser.value.username.length < 2 || newUser.value.username.length > 20) {
     errMsg.value.push('昵称长度最少为 2，最长为 20')
   }
   const reg =
@@ -27,29 +28,35 @@ const saveChange = () => {
   if (errMsg.value.length === 0) {
     if (website.value.length !== 0) {
       const urls = website.value.join(',')
-      user.urls = urls
+      newUser.value.urls = urls
     }
-    // TODO 保存，userstore 更新
-    changeProfile(user).then(() => {
+    changeProfile(newUser.value).then(res => {
+      userStore.user = { ...(res.data as IUser) }
       window.$message.success('更改成功')
     })
   }
 }
 
-if (user.urls) {
-  website.value = user.urls.split(',')
+if (newUser.value.urls) {
+  website.value = newUser.value.urls.split(',')
 }
 
-const fileList = ref<UploadFileInfo[]>([])
-if (user.avatar) {
-  fileList.value.push({
-    id: user.id + '',
-    name: user.username,
-    status: 'finished',
-    url: user.avatar
-  })
+// 图片上传
+const urls = ref<Array<string>>([])
+
+onMounted(() => {
+  if (newUser.value.avatar) {
+    urls.value?.push(newUser.value.avatar)
+  }
+})
+
+const updateVal = (file: UploadFileInfo) => {
+  if (file.status == 'finished') {
+    newUser.value.avatar = file.url as string
+  } else {
+    newUser.value.avatar = ''
+  }
 }
-console.log(fileList.value)
 </script>
 
 <template>
@@ -64,24 +71,18 @@ console.log(fileList.value)
       <div class="flex-1">
         <div class="py-5">
           <div class="mb-2 font-bold">昵称</div>
-          <n-input v-model:value="user.username" size="large"></n-input>
+          <n-input v-model:value="newUser.username" size="large"></n-input>
           <span>昵称 最少两个字</span>
         </div>
         <div class="py-5">
           <div class="mb-2 font-bold">头像</div>
-          <n-upload
-            action="http://localhost:8080/image/upload"
-            :default-file-list="fileList"
-            :max="1"
-            list-type="image-card"
-          >
-          </n-upload>
+          <CosUpload :urls="urls" @update-val="updateVal" />
           <span>JPEG、PNG、GIF 或 BMP • 限制 2MB</span>
         </div>
         <div class="py-5">
           <div class="mb-2 font-bold">简介</div>
           <n-input
-            v-model:value="user.resume"
+            v-model:value="newUser.resume"
             type="textarea"
             size="large"
           ></n-input>
@@ -95,7 +96,7 @@ console.log(fileList.value)
         <div class="py-5">
           <div class="mb-2 font-bold">地点</div>
           <n-input
-            v-model:value="user.area"
+            v-model:value="newUser.area"
             size="large"
             placeholder="例如：中国武汉"
           ></n-input>

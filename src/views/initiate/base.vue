@@ -1,6 +1,6 @@
 <script setup name="baseInfo" lang="ts">
-import { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
-import { listCategory, imageUpload } from '@/service'
+import { listCategory } from '@/service'
+import { UploadFileInfo } from 'naive-ui'
 import { Ref } from 'vue'
 
 const campaign = inject('campaign') as Ref<ICampaign>
@@ -17,52 +17,20 @@ const getCategory = () => {
 }
 getCategory()
 
-const customRequest = ({
-  file,
-  onFinish,
-  onError
-}: UploadCustomRequestOptions) => {
-  const formData = new FormData()
-  formData.append('file', file.file as File)
-  imageUpload(formData)
-    .then(res => {
-      if (res.code === 0) {
-        campaign.value.coverUrl = res.data.fullFilePath
-        window.$message.success('上传成功！')
-        onFinish()
-      }
-    })
-    .catch(() => {
-      onError()
-    })
-}
+const urls = ref<Array<string>>([])
 
-const fileUpdate = (fileList: UploadFileInfo[]) => {
-  if (fileList.length === 0) {
+onMounted(() => {
+  if (campaign.value.coverUrl) {
+    urls.value?.push(campaign.value.coverUrl)
+  }
+})
+
+const updateVal = (file: UploadFileInfo) => {
+  if (file.status == 'finished') {
+    campaign.value.coverUrl = file.url as string
+  } else {
     campaign.value.coverUrl = ''
   }
-}
-
-const fileList = ref<UploadFileInfo[]>([])
-
-if (campaign.value.coverUrl) {
-  fileList.value?.push({
-    id: campaign.value.id + '',
-    name: 'a',
-    url: campaign.value.coverUrl,
-    status: 'finished'
-  })
-}
-
-// const imageList = campaign.value.coverUrl ? [campaign.value.coverUrl] : []
-// const uploadRef = ref()
-
-const handleClick = () => {
-  // const fileList = uploadRef.value.fileList
-  // if (fileList) {
-  //   console.log(fileList[0])
-  //   console.log(fileList[0]?.url)
-  // }
 }
 </script>
 
@@ -104,14 +72,7 @@ const handleClick = () => {
           图片应简洁清晰，除 Logo
           外的其他文字要精练，说明产品亮点即可。好的项目图会为项目带来更多流量。
         </p>
-        <!-- <upload ref="uploadRef" :image-list="imageList" /> -->
-        <n-upload
-          v-model:default-file-list="fileList"
-          :max="1"
-          list-type="image-card"
-          :custom-request="customRequest"
-          @update:file-list="fileUpdate"
-        />
+        <CosUpload :urls="urls" @update-val="updateVal" />
       </div>
       <div class="my-10 space-y-2">
         <div class="text-base font-bold">分类</div>
@@ -150,7 +111,6 @@ const handleClick = () => {
         />
       </div>
     </div>
-    <n-button @click="handleClick">按钮</n-button>
   </div>
 </template>
 

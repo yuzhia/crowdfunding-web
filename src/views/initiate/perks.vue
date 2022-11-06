@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { imageUpload } from '@/service'
-import { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
+import { UploadFileInfo } from 'naive-ui'
 import { Ref } from 'vue'
 
 const campaign = inject<Ref<ICampaign>>('campaign') as Ref<ICampaign>
-const fileList = ref<UploadFileInfo[]>([])
 
 const initPerk: IPerk = {
   title: '',
+  description: '',
   imageUrl: '',
+  price: undefined,
+  returnDate: undefined,
   campaignId: campaign.value.id
 }
 
@@ -29,6 +30,8 @@ const saveBtn = () => {
   showModalRef.value = false
 }
 
+const urls = ref<Array<string>>([])
+
 const editPerk = (index: number) => {
   perk.value = { ...perks[index] }
   perk.value.num ? (limitNumRadio.value = 1) : (limitNumRadio.value = 0)
@@ -38,13 +41,8 @@ const editPerk = (index: number) => {
   showModalRef.value = true
   editIndex = index
   // 回显图片
-  fileList.value = []
-  fileList.value?.push({
-    id: perk.value.id + '',
-    name: 'a',
-    url: perk.value.imageUrl,
-    status: 'finished'
-  })
+  urls.value = []
+  urls.value.push(perk.value.imageUrl)
 }
 
 const removePerk = (index: number) => {
@@ -52,32 +50,12 @@ const removePerk = (index: number) => {
 }
 
 const addBtn = () => {
+  urls.value = []
   Object.assign(perk.value, initPerk)
   limitNumRadio.value = 0
   limitPurcharseRadio.value = 0
   showModalRef.value = true
   editIndex = -1
-}
-
-const customRequest = ({
-  file,
-  onFinish,
-  onError
-}: UploadCustomRequestOptions) => {
-  const formData = new FormData()
-  formData.append('file', file.file as File)
-  imageUpload(formData)
-    .then(res => {
-      if (res.code === 0) {
-        perk.value.imageUrl = res.data.fullFilePath
-        window.$message.success('上传成功！')
-        onFinish()
-      }
-    })
-    .catch(error => {
-      window.$message.error(error.msg)
-      onError()
-    })
 }
 
 const limitPurcharse = [
@@ -98,6 +76,14 @@ const onConfirm = (value: string | null) => {
 
 const handleClick = () => {
   console.log(campaign.value)
+}
+
+const updateVal = (file: UploadFileInfo) => {
+  if (file.status == 'finished') {
+    perk.value.imageUrl = file.url as string
+  } else {
+    perk.value.imageUrl = ''
+  }
 }
 </script>
 
@@ -164,12 +150,7 @@ const handleClick = () => {
             />
           </n-form-item>
           <n-form-item label="图片">
-            <n-upload
-              v-model:default-file-list="fileList"
-              :max="1"
-              list-type="image-card"
-              :custom-request="customRequest"
-            />
+            <CosUpload :urls="urls" @update-val="updateVal" />
           </n-form-item>
           <n-form-item label="金额">
             <n-input-number v-model:value="perk.price" :show-button="false">

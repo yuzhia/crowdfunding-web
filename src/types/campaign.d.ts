@@ -7,7 +7,7 @@ interface IFaq {
 
 interface IAsset {
   id?: number
-  fileId: string
+  fileId?: string
   url: string
   type: string
   campaignId: number

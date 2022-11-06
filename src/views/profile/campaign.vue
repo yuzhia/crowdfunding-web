@@ -16,15 +16,6 @@ const list = () => {
 
 list()
 
-let statusMap = new Map([
-  ['草稿', ''],
-  ['审核中', 'warning'],
-  ['即将开始', 'warning'],
-  ['众筹中', 'success'],
-  ['众筹成功', 'info'],
-  ['众筹失败', 'error']
-])
-
 const handleDeleteCampaign = (id: any) => {
   deleteCampaign(id).then(() => {
     list()
@@ -81,7 +72,7 @@ const handleClick = (id: number, status: string) => {
           <!-- 底部 -->
           <div class="flex justify-between items-center">
             <div class="space-x-1">
-              <n-tag :type="statusMap.get(item.status)">
+              <n-tag>
                 {{ item.status }}
               </n-tag>
               <n-time
