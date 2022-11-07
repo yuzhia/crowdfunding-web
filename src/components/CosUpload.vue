@@ -5,12 +5,22 @@ import { getSts } from '@/service'
 import { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 import { getExt, getYearMonth } from '@/utils'
 
-const props = withDefaults(defineProps<{ max?: number; urls?: string[] }>(), {
-  max: 1,
-  urls: () => {
-    return []
+const props = withDefaults(
+  defineProps<{
+    max?: number
+    urls?: string[]
+    width?: string
+    height?: string
+  }>(),
+  {
+    max: 1,
+    urls: () => {
+      return []
+    },
+    width: '96px',
+    height: '96px'
   }
-})
+)
 
 const fileList = ref<UploadFileInfo[]>([])
 
@@ -115,4 +125,16 @@ const handleChange = (options: { file: UploadFileInfo }) => {
   </n-upload>
 </template>
 
-<style></style>
+<style scoped>
+:deep(.n-upload-file-list.n-upload-file-list--grid) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, v-bind(width)) !important;
+  grid-gap: 8px;
+  margin-top: 0;
+}
+:deep(.n-upload-file-list .n-upload-file.n-upload-file--image-card-type),
+:deep(.n-upload-trigger.n-upload-trigger--image-card) {
+  width: 100%;
+  height: v-bind(height);
+}
+</style>

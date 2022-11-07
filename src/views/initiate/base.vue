@@ -72,7 +72,12 @@ const updateVal = (file: UploadFileInfo) => {
           图片应简洁清晰，除 Logo
           外的其他文字要精练，说明产品亮点即可。好的项目图会为项目带来更多流量。
         </p>
-        <CosUpload :urls="urls" @update-val="updateVal" />
+        <CosUpload
+          :width="'200px'"
+          :height="'200px'"
+          :urls="urls"
+          @update-val="updateVal"
+        />
       </div>
       <div class="my-10 space-y-2">
         <div class="text-base font-bold">分类</div>

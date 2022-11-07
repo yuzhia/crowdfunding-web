@@ -52,7 +52,7 @@ class RequestHttp {
         return {
           ...config,
           headers: {
-            satoken: token // 请求头中携带token信息
+            Authorization: 'Bearer ' + token // 请求头中携带token信息
           }
         }
       },
@@ -69,9 +69,13 @@ class RequestHttp {
     this.service.interceptors.response.use(
       (response: AxiosResponse) => {
         const { data } = response // 解构
+        const userStore = useUserStore()
+        // 登录验证
+        if (data.code == 10101) {
+          userStore.$reset()
+          return data
+        }
         if (data.code === RequestEnums.OVERDUE) {
-          const userStore = useUserStore()
-
           // 登录信息失效，应跳转到登录页面，并清空本地的token
           userStore.$reset()
           window.$message.error(data.msg || '失败！')

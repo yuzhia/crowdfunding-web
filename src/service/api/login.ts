@@ -2,7 +2,7 @@ import request from '../request'
 
 // 用户登录
 export const login = (data: ILoginReq) => {
-  return request.post<ILoginResp>(`/user/login`, data)
+  return request.post<ILoginResp>(`/user/doLogin`, data)
 }
 
 export const getInfo = () => {

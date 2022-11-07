@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>支付成功</div>
+  <div class="h-[800px] w-full">
+    <Cropper />
+  </div>
 </template>
 
 <style></style>

@@ -21,6 +21,14 @@ const props = defineProps<{
 }>()
 
 const onSubmit = () => {
+  if (!userStore.token) {
+    window.$message.error('请登录')
+    return
+  }
+  if (!content.value.trim()) {
+    window.$message.error('请输入内容')
+    return
+  }
   const comment: IComment = {
     campaignId: Number(route.params.id),
     content: content.value,

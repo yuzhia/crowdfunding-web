@@ -15,8 +15,17 @@ const user: ILoginReq = reactive({
 
 const handleLogin = () => {
   login(user).then(res => {
-    userStore.token = res.data?.tokenValue as string
-    userStore.user = res.data?.user as IUser
+    console.log(res)
+    const token = res.data.token
+    let payload = JSON.parse(
+      decodeURIComponent(
+        escape(
+          window.atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))
+        )
+      )
+    )
+    userStore.token = token
+    userStore.user = JSON.parse(payload.user) as IUser
     // 跳转首页·
     router.push('/index')
     window.$message.success('登录成功')

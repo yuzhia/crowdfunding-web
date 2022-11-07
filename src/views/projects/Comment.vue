@@ -5,16 +5,17 @@ import Input from './Input.vue'
 import { useMainStore, useUserStore } from '@/store'
 
 const mainStore = useMainStore()
-const { user } = useUserStore()
+const userStore = useUserStore()
+
 const props = defineProps<{
-  value: string
+  campaignId: string
 }>()
 
 let comments: any = ref([])
 
 watchEffect(() => {
   mainStore.inputFlag
-  queryComment(props.value).then(res => {
+  queryComment(props.campaignId).then(res => {
     comments.value = res.data
   })
 })
@@ -54,8 +55,8 @@ const getPUser = (replyComments: any, reply: any) => {
     <div class="flex mt-2 items-start mb-14">
       <div class="mr-2">
         <img
-          v-if="user.avatar"
-          :src="user.avatar"
+          v-if="userStore.user.avatar"
+          :src="userStore.user.avatar"
           class="w-12 h-12 rounded-full border"
         />
         <img

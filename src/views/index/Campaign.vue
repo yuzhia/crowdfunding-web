@@ -22,7 +22,7 @@ const handleClickRight = () => {
 }
 
 const rightStatus = computed(() => {
-  if (eleWidth.value) {
+  if (eleWidth.value && campaigns.value) {
     if (campaigns.value.length * 291 < eleWidth.value.clientWidth) {
       return false
     }

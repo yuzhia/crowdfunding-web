@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CampaignCard: typeof import('./src/components/CampaignCard.vue')['default']
     CosUpload: typeof import('./src/components/CosUpload.vue')['default']
+    Cropper: typeof import('./src/components/Cropper.vue')['default']
     HeaderAvatar: typeof import('./src/components/HeaderAvatar.vue')['default']
     IAntDesignLikeFilled: typeof import('~icons/ant-design/like-filled')['default']
     IAntDesignMessageFilled: typeof import('~icons/ant-design/message-filled')['default']
@@ -43,6 +44,7 @@ declare module '@vue/runtime-core' {
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
     NIcon: typeof import('naive-ui')['NIcon']
+    NImage: typeof import('naive-ui')['NImage']
     NInput: typeof import('naive-ui')['NInput']
     NInputNumber: typeof import('naive-ui')['NInputNumber']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']

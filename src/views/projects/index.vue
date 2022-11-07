@@ -212,7 +212,7 @@ const splitDate = (date: any) => {
           </n-tab-pane>
           <n-tab-pane name="update" tab="更新"> 更新 </n-tab-pane>
           <n-tab-pane name="comment" tab="讨论">
-            <Comment :value="campaignId" />
+            <Comment :campaign-id="campaignId" />
           </n-tab-pane>
         </n-tabs>
       </div>

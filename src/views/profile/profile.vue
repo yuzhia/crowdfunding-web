@@ -30,8 +30,8 @@ const saveChange = () => {
       const urls = website.value.join(',')
       newUser.value.urls = urls
     }
-    changeProfile(newUser.value).then(res => {
-      userStore.user = { ...(res.data as IUser) }
+    changeProfile(newUser.value).then(() => {
+      userStore.user = { ...newUser.value }
       window.$message.success('更改成功')
     })
   }

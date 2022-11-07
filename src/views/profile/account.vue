@@ -24,6 +24,7 @@ const saveChange = () => {
   }
   if (errMsg.value.length === 0) {
     changeUserPwd(user.value).then(() => {
+      userStore.user.email = user.value.email
       user.value.password = ''
       user.value.newPassword = ''
       user.value.reenteredPassword = ''

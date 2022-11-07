@@ -46,14 +46,27 @@ watchEffect(() => {
   campaign.value.assets = [...videoLinkList.value, ...imageLinkList.value]
 })
 
+const videoLink = ref('')
+const disabled = ref(true)
+const updateVideoInput = () => {
+  disabled.value = true
+  const reg = /(?:https?:\/\/)?(?:www\.)?youtube.*watch\?v=((\w|-){11})(?:\S+)?/
+  const mat = videoLink.value.match(reg)
+  if (mat) {
+    disabled.value = false
+  }
+}
+
 const addItem = () => {
   videoLinkList.value.push({
-    url: '',
+    url: videoLink.value,
     type: 'VIDEO',
     campaignId: campaign.value.id as number,
     fileId: ''
   })
+  videoLink.value = ''
 }
+
 const removeVideo = (index: number) => {
   videoLinkList.value.splice(index, 1)
 }
@@ -76,25 +89,64 @@ const removeVideo = (index: number) => {
     >
       <n-form-item path="sources">
         <n-tabs type="line" default-value="video" size="large">
+          <!-- 视频 -->
           <n-tab-pane name="video" tab="视频" display-directive="show">
             <p class="text-gray-400 font-thin mb-4">
               输入Bilibili或Video
               URL以显示在您的活动页面顶部。确保你的视频在Bilibili或Vimeo上启用了闭路字幕。
             </p>
             <div>
-              <div
-                v-for="(item, index) in videoLinkList"
-                :key="index"
-                class="flex gap-6 p-2"
-              >
-                <n-input v-model:value="videoLinkList[index].url" type="text" />
-                <n-button @click="removeVideo(index)">删除</n-button>
+              <div class="flex gap-6 mb-2">
+                <n-input
+                  v-model:value="videoLink"
+                  type="text"
+                  @update:value="updateVideoInput"
+                />
+                <n-button :disabled="disabled" @click="addItem"
+                  >添加视频</n-button
+                >
               </div>
-              <n-button class="w-full" @click="addItem">新增</n-button>
+              <div class="flex flex-wrap gap-2">
+                <div
+                  v-for="(item, index) in videoLinkList"
+                  :key="index"
+                  class="relative"
+                >
+                  <i-ep-close
+                    class="absolute top-0 right-0 w-7 h-7 bg-[#6a6a6a] text-white cursor-pointer"
+                    @click="removeVideo(index)"
+                  ></i-ep-close>
+                  <n-image
+                    :src="`https://i1.ytimg.com/vi/${
+                      item.url.split('=')[1]
+                    }/0.jpg`"
+                    width="300"
+                    class="h-[200px]"
+                    :preview-disabled="true"
+                    object-fit="cover"
+                  />
+                  <div>
+                    <a
+                      class="underline text-[#0EB4b6] text-xs"
+                      :href="item.url"
+                      target="_blank"
+                      >{{ item.url }}</a
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
           </n-tab-pane>
+          <!-- 图片 -->
           <n-tab-pane name="image" tab="图片" display-directive="show">
-            <CosUpload :max="10" :urls="urls" @update-val="updateVal" />
+            <CosUpload
+              class="w-full"
+              :width="'300px'"
+              :height="'200px'"
+              :max="10"
+              :urls="urls"
+              @update-val="updateVal"
+            />
           </n-tab-pane>
         </n-tabs>
       </n-form-item>
