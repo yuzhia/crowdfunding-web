@@ -9,6 +9,8 @@ const initPerk: IPerk = {
   description: '',
   imageUrl: '',
   price: undefined,
+  num: null,
+  limitPurchase: null,
   returnDate: undefined,
   campaignId: campaign.value.id
 }

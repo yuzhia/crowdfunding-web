@@ -4,6 +4,7 @@ import Story from './Story.vue'
 
 import { Ref } from 'vue'
 import { UploadFileInfo } from 'naive-ui'
+import { getVideoId } from '@/utils'
 
 const campaign = inject('campaign') as Ref<ICampaign>
 
@@ -46,11 +47,13 @@ watchEffect(() => {
   campaign.value.assets = [...videoLinkList.value, ...imageLinkList.value]
 })
 
+const reg = /(?:https?:\/\/)?(?:www\.)?youtube.*watch\?v=((\w|-){11})(?:\S+)?/
+
 const videoLink = ref('')
 const disabled = ref(true)
+
 const updateVideoInput = () => {
   disabled.value = true
-  const reg = /(?:https?:\/\/)?(?:www\.)?youtube.*watch\?v=((\w|-){11})(?:\S+)?/
   const mat = videoLink.value.match(reg)
   if (mat) {
     disabled.value = false
@@ -117,9 +120,9 @@ const removeVideo = (index: number) => {
                     @click="removeVideo(index)"
                   ></i-ep-close>
                   <n-image
-                    :src="`https://i1.ytimg.com/vi/${
-                      item.url.split('=')[1]
-                    }/0.jpg`"
+                    :src="`https://i1.ytimg.com/vi/${getVideoId(
+                      item.url
+                    )}/0.jpg`"
                     width="300"
                     class="h-[200px]"
                     :preview-disabled="true"

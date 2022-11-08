@@ -1,4 +1,4 @@
-export const timeDifference = (endTime: Date) => {
+export const timeDifference = (endTime: string | undefined) => {
   if (!endTime) {
     return 0
   }

@@ -15,9 +15,9 @@ const handleSelect = (key: string | number) => {
     userStore.$reset()
     router.push('/login')
   } else if (key == 'campaigns') {
-    router.push('/profile/campaign')
+    router.push('/activity')
   } else {
-    router.push('/profile')
+    router.push('/settings')
   }
 }
 

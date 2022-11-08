@@ -43,6 +43,7 @@ const onSubmit = () => {
 }
 
 const em = defineEmits<{
+  // eslint-disable-next-line no-unused-vars
   (e: 'form-delete', id: never): void
 }>()
 
@@ -60,8 +61,9 @@ onMounted(() => {
 onClickOutside(inputBox, () => {
   // 点击外区域，不是评论框才执行
   if (!props.isRoot) {
-    console.log('执行了clickOut')
-    handleBlur()
+    if (!content.value) {
+      handleBlur()
+    }
   }
 })
 </script>

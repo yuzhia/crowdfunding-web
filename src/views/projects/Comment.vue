@@ -8,7 +8,7 @@ const mainStore = useMainStore()
 const userStore = useUserStore()
 
 const props = defineProps<{
-  campaignId: string
+  campaignId: number
 }>()
 
 let comments: any = ref([])
@@ -41,7 +41,7 @@ const deleteForm = (id: never) => {
 // 获取被回复用户的信息
 const getPUser = (replyComments: any, reply: any) => {
   const filter = replyComments.filter(
-    replyComment => replyComment.id === reply.pid
+    (replyComment: any) => replyComment.id === reply.pid
   )
   if (filter.length > 0) {
     return filter[0].user
@@ -69,7 +69,12 @@ const getPUser = (replyComments: any, reply: any) => {
     </div>
     <!-- 回复 -->
     <div v-for="item in comments" :key="item.id" class="p-2">
-      <Content :comment="item" :forms="forms" @comment-reply="hasForm" />
+      <Content
+        :user="item.user"
+        :comment="item"
+        :forms="forms"
+        @comment-reply="hasForm"
+      />
       <div class="mt-2" :class="item.pid === 0 ? 'ml-12' : 'ml-10'">
         <Input
           v-if="forms.includes(item.id as never)"

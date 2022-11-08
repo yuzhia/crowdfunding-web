@@ -18,8 +18,8 @@ interface IPerk {
   title: string
   description?: string
   price?: number
-  num?: number
-  limitPurchase?: number
+  num?: number | null
+  limitPurchase?: number | null
   imageUrl: string
   returnDate?: string
   campaignId?: number
@@ -44,7 +44,7 @@ interface ICampaign {
   collectedFunds?: number
   totalBackers?: number
   remainDay?: number
-  endTime?: Date
+  endTime?: string
 }
 
 interface IPage {

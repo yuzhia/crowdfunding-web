@@ -89,8 +89,41 @@ export default [
         ]
       },
       {
-        path: '/profile',
-        component: () => import('@/views/profile/index.vue'),
+        path: '/activity',
+        component: () => import('@/views/activity/index.vue'),
+        meta: {
+          requireLogin: true
+        },
+        children: [
+          {
+            path: '',
+            name: 'campaigns',
+            meta: {
+              title: '活动'
+            },
+            component: () => import('@/views/activity/campaigns.vue')
+          },
+          {
+            path: 'backers',
+            name: 'backers',
+            meta: {
+              title: '支持'
+            },
+            component: () => import('@/views/activity/backers.vue')
+          },
+          {
+            path: 'follows',
+            name: 'follows',
+            meta: {
+              title: '关注'
+            },
+            component: () => import('@/views/activity/follows.vue')
+          }
+        ]
+      },
+      {
+        path: '/settings',
+        component: () => import('@/views/settings/index.vue'),
         meta: {
           requireLogin: true
         },
@@ -101,7 +134,7 @@ export default [
             meta: {
               title: '个人资料'
             },
-            component: () => import('@/views/profile/profile.vue')
+            component: () => import('@/views/settings/profile.vue')
           },
           {
             path: 'account',
@@ -109,23 +142,7 @@ export default [
             meta: {
               title: '账户'
             },
-            component: () => import('@/views/profile/account.vue')
-          },
-          {
-            path: 'campaign',
-            name: 'campaign',
-            meta: {
-              title: '活动'
-            },
-            component: () => import('@/views/profile/campaign.vue')
-          },
-          {
-            path: 'support',
-            name: 'support',
-            meta: {
-              title: '支持'
-            },
-            component: () => import('@/views/profile/support.vue')
+            component: () => import('@/views/settings/account.vue')
           },
           {
             path: 'address',
@@ -133,7 +150,15 @@ export default [
             meta: {
               title: '地址'
             },
-            component: () => import('@/views/profile/address.vue')
+            component: () => import('@/views/settings/address.vue')
+          },
+          {
+            path: 'notifications',
+            name: 'notifications',
+            meta: {
+              title: '通知'
+            },
+            component: () => import('@/views/settings/notifications.vue')
           }
         ]
       }

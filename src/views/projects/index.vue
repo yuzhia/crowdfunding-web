@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getPercent, timeDifference, getStatus } from '@/utils'
+import { getPercent, timeDifference, getStatus, getVideoId } from '@/utils'
 import { getCampaign } from '@/service'
 import Comment from './Comment.vue'
 import MdEditor from 'md-editor-v3'
@@ -12,24 +12,25 @@ const campaign = ref({} as ICampaign)
 const imageAssets = ref<Array<IAsset>>([])
 const videoAssets = ref<Array<IAsset>>([])
 
-const campaignId = route.params.id as string
+provide('OP', campaign)
 
-getCampaign(campaignId).then(res => {
-  campaign.value = res.data
-  imageAssets.value = campaign.value.assets.filter(
-    asset => asset.type === 'IMAGE'
-  )
-  videoAssets.value = campaign.value.assets.filter(
-    asset => asset.type === 'VIDEO'
-  )
-  console.log(campaign.value)
-})
-
-const getVideoId = (url: string) => {
-  if (url) {
-    return url.split('?')[1].split('=')[1]
-  }
-}
+watch(
+  () => route.params.id,
+  () => {
+    if (route.params.id) {
+      getCampaign(route.params.id).then(res => {
+        campaign.value = res.data
+        imageAssets.value = campaign.value.assets.filter(
+          asset => asset.type === 'IMAGE'
+        )
+        videoAssets.value = campaign.value.assets.filter(
+          asset => asset.type === 'VIDEO'
+        )
+      })
+    }
+  },
+  { immediate: true }
+)
 
 const splitDate = (date: any) => {
   if (date) {
@@ -45,6 +46,7 @@ const splitDate = (date: any) => {
       <!-- video -->
       <n-carousel
         show-arrow
+        :show-dots="false"
         :transition-style="{ transitionDuration: '400ms' }"
         :default-index="0"
         class="shrink-0 w-full h-[274px] md:flex-1 lg:w-[695px] md:h-full"
@@ -76,7 +78,7 @@ const splitDate = (date: any) => {
         <img
           v-for="item in imageAssets"
           :key="item.id"
-          class="w-full h-[460px] object-cover"
+          class="w-full h-[460px] object-fill"
           :src="item.url"
         />
 
@@ -90,11 +92,9 @@ const splitDate = (date: any) => {
             <img
               v-for="(item, index) in videoAssets"
               :key="item.id"
-              class="cursor-pointer w-12 h-full object-fill"
+              class="cursor-pointer w-12 h-full object-cover"
               :src="
-                'https://img.youtube.com/vi/' +
-                getVideoId(item.url) +
-                '/mqdefault.jpg'
+                'https://i1.ytimg.com/vi/' + getVideoId(item.url) + '/0.jpg'
               "
               mode="aspectFill"
               @click="to(index)"
@@ -173,7 +173,7 @@ const splitDate = (date: any) => {
             <span v-if="campaign.status == 'underway'">
               还剩
               <span class="font-semibold">{{
-                timeDifference(campaign.endTime as Date)
+                timeDifference(campaign.endTime)
               }}</span>
             </span>
           </div>
@@ -212,11 +212,10 @@ const splitDate = (date: any) => {
           </n-tab-pane>
           <n-tab-pane name="update" tab="更新"> 更新 </n-tab-pane>
           <n-tab-pane name="comment" tab="讨论">
-            <Comment :campaign-id="campaignId" />
+            <Comment :campaign-id="campaign.id as number" />
           </n-tab-pane>
         </n-tabs>
       </div>
-      <!-- perk -->
       <div
         class="mb-10 overflow-auto md:sticky top-0 md:h-[90vh] md:w-72 lg:w-96 pr-4"
       >
@@ -227,7 +226,9 @@ const splitDate = (date: any) => {
             <div class="border-b mb-4 pb-2">
               <div class="flex justify-between items-center">
                 <p class="text-2xl font-bold">￥{{ item.price }}</p>
-                <p v-if="item.num !== 0">已支持 3 份 / <span>限 66 份</span></p>
+                <p v-if="item.num !== 0">
+                  已支持 0 份 / <span>限 {{ item.num }} 份</span>
+                </p>
               </div>
               <div v-if="item.num !== 0" class="text-xs ml-1">
                 <n-tag type="success" size="small" :bordered="false" round>

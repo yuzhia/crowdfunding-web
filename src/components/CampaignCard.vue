@@ -35,7 +35,9 @@ defineProps<{
         </n-button>
       </div>
       <div>
-        <span>{{ campaign.collectedFunds }}</span>
+        <span class="text-green-500 text-base font-bold"
+          >¥ {{ campaign.collectedFunds }}</span
+        >
         <n-progress
           type="line"
           :percentage="getPercent(campaign.collectedFunds, campaign.goal)"
@@ -58,7 +60,7 @@ defineProps<{
           <div v-if="campaign.status != '已发布'">
             {{ getStatus(campaign.status) }}
           </div>
-          <div v-else>还剩 {{ timeDifference(campaign.endTime as Date) }}</div>
+          <div v-else>还剩 {{ timeDifference(campaign.endTime) }}</div>
         </div>
       </div>
     </div>

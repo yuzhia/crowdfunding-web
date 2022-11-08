@@ -39,3 +39,7 @@ export const deleteDraft = (tempId: any) => {
 export const deleteCampaign = (id: any) => {
   return request.delete(`/campaign/${id}`)
 }
+
+export const searchCampaign = (key: string) => {
+  return request.get<Array<ICampaign>>(`/campaign/search`, { key })
+}

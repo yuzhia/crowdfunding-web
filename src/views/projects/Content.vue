@@ -1,12 +1,15 @@
 <script setup lang="ts">
 defineProps<{
-  comment: Object
+  comment: IComment
   pid?: number
-  user?: Object
+  user?: IUser
   forms: []
 }>()
 
+const op = inject('OP') as ICampaign
+
 defineEmits<{
+  // eslint-disable-next-line no-unused-vars
   (e: 'comment-reply', id: never): void
 }>()
 
@@ -39,8 +42,16 @@ defineEmits<{
           class="flex justify-between items-center"
           :class="comment.pid === 0 ? 'h-10' : 'h-8'"
         >
-          <div class="text-green-500 mb-1 text-base">
-            {{ comment.user.username }}
+          <div class="flex gap-4 items-center">
+            <div class="text-green-500 mb-1 text-base">
+              {{ comment.user.username }}
+            </div>
+            <div
+              v-if="comment.userId == op?.user?.id"
+              class="text-xs py-1 px-2 bg-[#088366] text-white rounded"
+            >
+              发起人
+            </div>
           </div>
           <div class="text-[#7a8087]">
             {{ comment.createTime.replace(/T/g, ' ') }}
