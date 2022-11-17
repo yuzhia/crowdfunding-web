@@ -31,6 +31,10 @@ const handleClick = (id: number, status: string) => {
     router.push(`/projects/${id}`)
   }
 }
+
+const handleUpdate = (id: number) => {
+  router.push(`/projects/${id}/updates`)
+}
 </script>
 
 <template>
@@ -94,7 +98,7 @@ const handleClick = (id: number, status: string) => {
                   <n-button @click.stop="">删除</n-button>
                 </template>
               </n-popconfirm>
-              <n-button>回报</n-button>
+              <n-button @click="handleUpdate(item.id as number)">更新</n-button>
             </div>
           </div>
         </div>

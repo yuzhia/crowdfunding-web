@@ -9,6 +9,8 @@ interface IComment {
   campaignId: number
   content: string
   pid?: number
+  postId?: number
+  groupId?: number
 }
 
 const userStore = useUserStore()
@@ -18,6 +20,8 @@ const props = defineProps<{
   replayId?: number
   isRoot?: boolean
   user?: IUser
+  groupId?: any
+  postId?: number
 }>()
 
 const onSubmit = () => {
@@ -32,7 +36,9 @@ const onSubmit = () => {
   const comment: IComment = {
     campaignId: Number(route.params.id),
     content: content.value,
-    pid: props.replayId
+    pid: props.replayId,
+    postId: props.postId,
+    groupId: props.groupId
   }
   saveComment(comment as any).then(() => {
     content.value = ''

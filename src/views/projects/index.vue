@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { getPercent, timeDifference, getStatus, getVideoId } from '@/utils'
-import { getCampaign } from '@/service'
+import { getCampaign, listUpdatesByCampaignId } from '@/service'
 import Comment from './Comment.vue'
+import UpdateTab from './UpdateTab.vue'
 import MdEditor from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
+import router from '@/router'
+import { useOrderStore } from '@/store'
 
+const orderStore = useOrderStore()
 const route = useRoute()
 
 const campaign = ref({} as ICampaign)
@@ -38,6 +42,22 @@ const splitDate = (date: any) => {
     return arr[0] + '年' + arr[1] + '月'
   }
 }
+
+const seeOptions = () => {
+  router.push(`/projects/${campaign.value.id}/perks`)
+}
+
+const toSupport = (perkId: number) => {
+  orderStore.orderCampaign = campaign.value
+  orderStore.orderPerkId = perkId
+  router.push({ name: 'checkout' })
+}
+
+// updateTab
+const storyList = ref()
+listUpdatesByCampaignId(route.params.id as any).then(res => {
+  storyList.value = res.data
+})
 </script>
 
 <template>
@@ -181,7 +201,9 @@ const splitDate = (date: any) => {
         <!-- 支持按钮 -->
         <div class="flex justify-between items-center pt-3">
           <div>
-            <n-button type="primary" size="large">支持</n-button>
+            <n-button type="primary" size="large" @click="seeOptions"
+              >支持</n-button
+            >
             <n-button type="primary" size="large" class="ml-3">关注</n-button>
           </div>
           <div class="flex gap-x-2 items-center">
@@ -203,16 +225,26 @@ const splitDate = (date: any) => {
             <md-editor v-model="campaign.story" :preview-only="true" />
           </n-tab-pane>
           <n-tab-pane name="faq" tab="常见问题">
-            <n-card v-for="item in campaign.faqs" :key="item.id" hoverable>
-              <div class="text-base font-semibold md:text-xl mb-2">
-                {{ item.question }}
-              </div>
-              <div class="text-sm md:text-base">{{ item.answer }}</div>
-            </n-card>
+            <n-collapse>
+              <n-collapse-item
+                v-for="item in campaign.faqs"
+                :key="item.id"
+                :name="item.id"
+              >
+                <template #header>
+                  <div class="font-bold text-base">
+                    {{ item.question }}
+                  </div>
+                </template>
+                {{ item.answer }}
+              </n-collapse-item>
+            </n-collapse>
           </n-tab-pane>
-          <n-tab-pane name="update" tab="更新"> 更新 </n-tab-pane>
+          <n-tab-pane name="update" tab="更新">
+            <UpdateTab :story-list="storyList" />
+          </n-tab-pane>
           <n-tab-pane name="comment" tab="讨论">
-            <Comment :campaign-id="campaign.id as number" />
+            <Comment />
           </n-tab-pane>
         </n-tabs>
       </div>
@@ -220,7 +252,7 @@ const splitDate = (date: any) => {
         class="mb-10 overflow-auto md:sticky top-0 md:h-[90vh] md:w-72 lg:w-96 pr-4"
       >
         <div
-          class="flex w-[208px] h-[375px] md:block md:w-full space-x-4 md:space-y-4 md:space-x-0"
+          class="flex w-full h-[410px] md:block space-x-4 md:space-y-4 md:space-x-0"
         >
           <n-card v-for="item in campaign.perks" :key="item.id" hoverable>
             <div class="border-b mb-4 pb-2">
@@ -245,7 +277,9 @@ const splitDate = (date: any) => {
               <div class="py-2">
                 预计回报发放时间 {{ splitDate(item.returnDate) }} 内
               </div>
-              <n-button type="primary" class="w-44">去支持</n-button>
+              <n-button type="primary" class="w-44" @click="toSupport(item.id)"
+                >去支持</n-button
+              >
             </div>
           </n-card>
         </div>

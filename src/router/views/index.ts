@@ -5,7 +5,7 @@ export default [
     path: '/',
     component: () => import('@/layouts/index.vue'),
     name: 'main',
-    meta: { title: '容器' },
+    meta: { title: '微筹' },
     redirect: { path: '/index' },
     children: [
       {
@@ -33,12 +33,38 @@ export default [
         component: () => import('@/views/projects/index.vue')
       },
       {
+        path: '/projects/:id/perks',
+        name: 'projects-perks',
+        meta: {
+          title: '回报列表'
+        },
+        component: () => import('@/views/projects/perks.vue')
+      },
+      {
+        path: '/projects/:id/updates',
+        name: 'projects-updates',
+        meta: {
+          title: '更新'
+        },
+        component: () => import('@/views/activity/updates.vue')
+      },
+      {
         path: '/pay',
         name: 'pay',
         meta: {
           title: '支付'
         },
         component: () => import('@/views/pay.vue')
+      },
+      {
+        path: '/order',
+        name: 'order',
+        component: () => import('@/views/order/index.vue')
+      },
+      {
+        path: '/checkout',
+        name: 'checkout',
+        component: () => import('@/views/order/checkout.vue')
       },
       {
         path: '/success',

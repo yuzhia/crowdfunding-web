@@ -15,12 +15,12 @@ interface IAsset {
 
 interface IPerk {
   id?: number
-  title: string
+  title?: string
   description?: string
   price?: number
   num?: number | null
   limitPurchase?: number | null
-  imageUrl: string
+  imageUrl?: string
   returnDate?: string
   campaignId?: number
 }

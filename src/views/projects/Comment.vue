@@ -6,19 +6,37 @@ import { useMainStore, useUserStore } from '@/store'
 
 const mainStore = useMainStore()
 const userStore = useUserStore()
-
-const props = defineProps<{
-  campaignId: number
-}>()
+const route = useRoute()
 
 let comments: any = ref([])
 
-watchEffect(() => {
-  mainStore.inputFlag
-  queryComment(props.campaignId).then(res => {
-    comments.value = res.data
+const props = defineProps<{
+  postId?: number
+}>()
+
+const pageNum = ref(1)
+const pageSize = ref(10)
+const pages = ref()
+
+const query = () => {
+  queryComment(
+    route.params.id,
+    props.postId ? props.postId : null,
+    pageNum.value,
+    pageSize.value
+  ).then(res => {
+    pages.value = res.data.pages
+    comments.value = res.data.records
   })
-})
+}
+
+watch(
+  () => mainStore.inputFlag,
+  () => {
+    query()
+  },
+  { immediate: true }
+)
 
 // form 表单显示隐藏
 const forms = ref([] as any)
@@ -47,6 +65,10 @@ const getPUser = (replyComments: any, reply: any) => {
     return filter[0].user
   }
 }
+
+const updatePage = () => {
+  query()
+}
 </script>
 
 <template>
@@ -65,7 +87,7 @@ const getPUser = (replyComments: any, reply: any) => {
           class="w-12 h-12 rounded-full border"
         />
       </div>
-      <Input class="w-full" :is-root="true" />
+      <Input class="w-full" :is-root="true" :post-id="postId" />
     </div>
     <!-- 回复 -->
     <div v-for="item in comments" :key="item.id" class="p-2">
@@ -75,11 +97,13 @@ const getPUser = (replyComments: any, reply: any) => {
         :forms="forms"
         @comment-reply="hasForm"
       />
-      <div class="mt-2" :class="item.pid === 0 ? 'ml-12' : 'ml-10'">
+      <div class="mt-2" :class="!item.pid ? 'ml-12' : 'ml-10'">
         <Input
           v-if="forms.includes(item.id as never)"
           :user="item.user"
           :replay-id="item.id"
+          :group-id="item.id"
+          :post-id="postId"
           @form-delete="deleteForm"
         />
       </div>
@@ -98,15 +122,26 @@ const getPUser = (replyComments: any, reply: any) => {
           :user="getPUser(item.replyComments, replay)"
           @comment-reply="hasForm"
         />
-        <div class="mt-2" :class="replay.pid === 0 ? 'ml-12' : 'ml-10'">
+        <div class="mt-2" :class="!replay.pid ? 'ml-12' : 'ml-10'">
           <Input
             v-if="forms.includes(replay.id as never)"
             :user="replay.user"
             :replay-id="replay.id"
+            :group-id="item.id"
+            :post-id="postId"
             @form-delete="deleteForm"
           />
         </div>
       </div>
+    </div>
+
+    <!-- 加载更多 -->
+    <div v-if="pages > 1">
+      <n-pagination
+        v-model:page="pageNum"
+        :page-count="pages"
+        @update-page="updatePage"
+      />
     </div>
   </div>
 </template>

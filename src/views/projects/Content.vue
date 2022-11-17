@@ -27,20 +27,20 @@ defineEmits<{
           v-if="comment.user.avatar"
           :src="comment.user.avatar"
           class="rounded-full border"
-          :class="comment.pid === 0 ? 'w-10 h-10' : 'w-8 h-8'"
+          :class="!comment.pid ? 'w-10 h-10' : 'w-8 h-8'"
         />
         <img
           v-else
           src="@/assets/img/avatar.svg"
           class="rounded-full border"
-          :class="comment.pid === 0 ? 'w-10 h-10' : 'w-8 h-8'"
+          :class="!comment.pid ? 'w-10 h-10' : 'w-8 h-8'"
         />
       </div>
       <div class="w-full">
         <!-- 名称，时间 -->
         <div
           class="flex justify-between items-center"
-          :class="comment.pid === 0 ? 'h-10' : 'h-8'"
+          :class="!comment.pid ? 'h-10' : 'h-8'"
         >
           <div class="flex gap-4 items-center">
             <div class="text-green-500 mb-1 text-base">
@@ -60,7 +60,7 @@ defineEmits<{
         <!-- 评论 -->
         <div>
           <!-- 过滤掉一级评论和一级回复 -->
-          <span v-if="comment.pid !== 0 && comment.pid !== pid">
+          <span v-if="comment.pid && comment.pid !== pid">
             回复 <span class="text-green-500">{{ user?.username }}</span
             >：</span
           >

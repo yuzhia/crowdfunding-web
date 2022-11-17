@@ -1,4 +1,3 @@
-import { ICampaign } from '@/service/types/campaign'
 import { defineStore } from 'pinia'
 
 export const useCampaignStore = defineStore('campaign', {
