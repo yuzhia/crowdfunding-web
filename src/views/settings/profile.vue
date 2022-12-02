@@ -2,6 +2,7 @@
 import { changeProfile } from '@/service'
 import { useUserStore } from '@/store'
 import { UploadFileInfo } from 'naive-ui'
+import { REGEXP_URL } from '@/common'
 
 const userStore = useUserStore()
 
@@ -16,11 +17,9 @@ const saveChange = () => {
   if (newUser.value.username.length < 2 || newUser.value.username.length > 20) {
     errMsg.value.push('昵称长度最少为 2，最长为 20')
   }
-  const reg =
-    /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/
 
   for (let i = 0; i < website.value.length; i++) {
-    if (!reg.test(website.value[i])) {
+    if (!REGEXP_URL.test(website.value[i])) {
       errMsg.value.push('网站格式有问题')
       break
     }
@@ -81,44 +80,24 @@ const updateVal = (file: UploadFileInfo) => {
         </div>
         <div class="py-5">
           <div class="mb-2 font-bold">简介</div>
-          <n-input
-            v-model:value="newUser.resume"
-            type="textarea"
-            size="large"
-          ></n-input>
+          <n-input v-model:value="newUser.resume" type="textarea" size="large"></n-input>
           <span
-            >我们建议个人简介可以短一点。300
-            个字以下的内容在你的个人资料页面上会看起来很棒。</span
+            >我们建议个人简介可以短一点。300 个字以下的内容在你的个人资料页面上会看起来很棒。</span
           >
         </div>
       </div>
       <div class="flex-1">
         <div class="py-5">
           <div class="mb-2 font-bold">地点</div>
-          <n-input
-            v-model:value="newUser.area"
-            size="large"
-            placeholder="例如：中国武汉"
-          ></n-input>
+          <n-input v-model:value="newUser.area" size="large" placeholder="例如：中国武汉"></n-input>
         </div>
         <div class="py-5">
           <div class="mb-2 font-bold">网站</div>
-          <div
-            v-for="(item, index) in website"
-            :key="index"
-            class="mb-2 space-x-2"
-          >
-            <n-input
-              v-model:value="website[index]"
-              type="text"
-              size="large"
-              style="width: 82%"
-            />
+          <div v-for="(item, index) in website" :key="index" class="mb-2 space-x-2">
+            <n-input v-model:value="website[index]" type="text" size="large" style="width: 82%" />
             <n-button @click.stop="website.splice(index, 1)">删除</n-button>
           </div>
-          <n-button type="primary" @click.stop="website.push('')"
-            >新增</n-button
-          >
+          <n-button type="primary" @click.stop="website.push('')">新增</n-button>
         </div>
       </div>
     </div>

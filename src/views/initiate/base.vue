@@ -47,14 +47,8 @@ const updateVal = (file: UploadFileInfo) => {
     <div>
       <div class="my-10 space-y-2">
         <div class="text-base font-bold">项目标题</div>
-        <p class="text-[#6a6a6a]">
-          写一个清晰、意赅的标题，帮助人们快速理解你的项目主题
-        </p>
-        <n-input
-          v-model:value="campaign.title"
-          maxlength="30"
-          show-count
-        ></n-input>
+        <p class="text-[#6a6a6a]">写一个清晰、意赅的标题，帮助人们快速理解你的项目主题</p>
+        <n-input v-model:value="campaign.title" maxlength="60" show-count></n-input>
       </div>
       <div class="my-10 space-y-2">
         <div class="text-base font-bold">项目描述</div>
@@ -62,7 +56,7 @@ const updateVal = (file: UploadFileInfo) => {
         <n-input
           v-model:value="campaign.description"
           type="textarea"
-          maxlength="96"
+          maxlength="156"
           show-count
         ></n-input>
       </div>
@@ -72,18 +66,11 @@ const updateVal = (file: UploadFileInfo) => {
           图片应简洁清晰，除 Logo
           外的其他文字要精练，说明产品亮点即可。好的项目图会为项目带来更多流量。
         </p>
-        <CosUpload
-          :width="'200px'"
-          :height="'200px'"
-          :urls="urls"
-          @update-val="updateVal"
-        />
+        <CosUpload :width="'200px'" :height="'200px'" :urls="urls" @update-val="updateVal" />
       </div>
       <div class="my-10 space-y-2">
         <div class="text-base font-bold">分类</div>
-        <p class="text-[#6a6a6a]">
-          按实际情况选择你项目最符合的类别，平台会精准推荐相关用户。
-        </p>
+        <p class="text-[#6a6a6a]">按实际情况选择你项目最符合的类别，平台会精准推荐相关用户。</p>
         <n-select
           v-model:value="campaign.categoryId"
           placeholder="选择分类"
@@ -104,8 +91,7 @@ const updateVal = (file: UploadFileInfo) => {
       <div class="my-10 space-y-2">
         <div class="text-base font-bold">活动持续时间</div>
         <p class="text-[#6a6a6a]">
-          活动计划于2022年11月11日太平洋标准时间早上7:59结束
-          您有资格一次性延长60天的最长期限。
+          活动计划于2022年11月11日太平洋标准时间早上7:59结束 您有资格一次性延长60天的最长期限。
         </p>
         <n-input-number
           v-model:value="campaign.duration"

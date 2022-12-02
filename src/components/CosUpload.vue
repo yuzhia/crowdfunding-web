@@ -61,11 +61,7 @@ const cos = new COS({
   }
 })
 
-const customRequest = ({
-  file,
-  onFinish,
-  onError
-}: UploadCustomRequestOptions) => {
+const customRequest = ({ file, onFinish, onError }: UploadCustomRequestOptions) => {
   cos.uploadFile(
     {
       Bucket: 'crowdfunding-1252169801',
@@ -90,10 +86,7 @@ const customRequest = ({
   )
 }
 
-const beforeUpload = (options: {
-  file: UploadFileInfo
-  fileList: UploadFileInfo[]
-}) => {
+const beforeUpload = (options: { file: UploadFileInfo; fileList: UploadFileInfo[] }) => {
   if (!getExt(options.file.type)) {
     window.$message.error('只能上传图片文件，请重新上传')
     return false

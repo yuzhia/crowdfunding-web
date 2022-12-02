@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { changeUserPwd } from '@/service'
 import { useUserStore } from '@/store'
+import { REGEXP_EMAIL } from '@/common'
 
 const userStore = useUserStore()
 
@@ -15,8 +16,7 @@ const errMsg = ref<Array<string>>([])
 
 const saveChange = () => {
   errMsg.value = []
-  const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-  if (!reg.test(user.value.email as string)) {
+  if (!REGEXP_EMAIL.test(user.value.email as string)) {
     errMsg.value.push('请输入正确的邮箱地址')
   }
   if (user.value.newPassword !== user.value.reenteredPassword) {
@@ -49,15 +49,9 @@ const saveChange = () => {
         <input type="password" hidden autocomplete="new-password" />
       </n-form-item>
       <n-form-item label="密码">
-        <n-button type="primary" size="medium" @click="changePwd = !changePwd"
-          >变更密码</n-button
-        >
+        <n-button type="primary" size="medium" @click="changePwd = !changePwd">变更密码</n-button>
       </n-form-item>
-      <n-form-item
-        label="新密码"
-        path="password"
-        :class="changePwd ? 'block' : 'hidden'"
-      >
+      <n-form-item label="新密码" path="password" :class="changePwd ? 'block' : 'hidden'">
         <n-input
           v-model:value="user.newPassword"
           type="password"
@@ -70,23 +64,13 @@ const saveChange = () => {
         path="reenteredPassword"
         :class="changePwd ? 'block' : 'hidden'"
       >
-        <n-input
-          v-model:value="user.reenteredPassword"
-          type="password"
-          placeholder=""
-        ></n-input>
+        <n-input v-model:value="user.reenteredPassword" type="password" placeholder=""></n-input>
       </n-form-item>
       <n-form-item label="当前密码">
-        <n-input
-          v-model:value="user.password"
-          type="password"
-          placeholder=""
-        ></n-input>
+        <n-input v-model:value="user.password" type="password" placeholder=""></n-input>
       </n-form-item>
       <n-form-item label="输入目前密码，保存这些更改">
-        <n-button type="primary" size="medium" @click="saveChange"
-          >保存更改</n-button
-        >
+        <n-button type="primary" size="medium" @click="saveChange">保存更改</n-button>
       </n-form-item>
     </n-form>
   </div>

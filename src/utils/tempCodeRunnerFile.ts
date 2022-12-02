@@ -1,1 +1,0 @@
-getExt('image/jpeg')

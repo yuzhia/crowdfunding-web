@@ -24,12 +24,8 @@ watch(
     if (route.params.id) {
       getCampaign(route.params.id).then(res => {
         campaign.value = res.data
-        imageAssets.value = campaign.value.assets.filter(
-          asset => asset.type === 'IMAGE'
-        )
-        videoAssets.value = campaign.value.assets.filter(
-          asset => asset.type === 'VIDEO'
-        )
+        imageAssets.value = campaign.value.assets.filter(asset => asset.type === 'IMAGE')
+        videoAssets.value = campaign.value.assets.filter(asset => asset.type === 'VIDEO')
       })
     }
   },
@@ -113,9 +109,7 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
               v-for="(item, index) in videoAssets"
               :key="item.id"
               class="cursor-pointer w-12 h-full object-cover"
-              :src="
-                'https://i1.ytimg.com/vi/' + getVideoId(item.url) + '/0.jpg'
-              "
+              :src="'https://i1.ytimg.com/vi/' + getVideoId(item.url) + '/0.jpg'"
               mode="aspectFill"
               @click="to(index)"
             />
@@ -130,9 +124,7 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
         </template>
       </n-carousel>
       <!-- 描述 -->
-      <div
-        class="flex flex-col break-all space-y-3 flex-1 pb-16 px-4 mt-2 md:mt-0"
-      >
+      <div class="flex flex-col break-all space-y-3 flex-1 pb-16 px-4 mt-2 md:mt-0">
         <!-- 状态 -->
         <div class="text-sm font-semibold text-[#088366]">
           {{ getStatus(campaign.status) }}
@@ -147,15 +139,9 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
         </div>
         <!-- 头像 -->
         <div class="flex py-3 items-center">
-          <n-avatar
-            class="w-10 h-10"
-            round
-            :src="campaign.user?.avatar"
-          ></n-avatar>
+          <n-avatar class="w-10 h-10" round :src="campaign.user?.avatar"></n-avatar>
           <div class="ml-2">
-            <p
-              class="text-base font-semibold hover:underline hover:cursor-pointer"
-            >
+            <p class="text-base font-semibold hover:underline hover:cursor-pointer">
               {{ campaign.user?.username }}
             </p>
             <p>已发起 {{ campaign.count }} 个活动 | 42 个已支持</p>
@@ -166,9 +152,7 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
           <div class="flex justify-between items-center">
             <span>
               已筹
-              <span class="text-xl font-semibold"
-                >￥{{ campaign.collectedFunds }}</span
-              >
+              <span class="text-xl font-semibold">￥{{ campaign.collectedFunds }}</span>
             </span>
             <div>
               <i-el-group class="inline-block mr-2 text-xl text-green-600" />
@@ -192,25 +176,19 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
             </span>
             <span v-if="campaign.status == 'underway'">
               还剩
-              <span class="font-semibold">{{
-                timeDifference(campaign.endTime)
-              }}</span>
+              <span class="font-semibold">{{ timeDifference(campaign.endTime) }}</span>
             </span>
           </div>
         </div>
         <!-- 支持按钮 -->
         <div class="flex justify-between items-center pt-3">
           <div>
-            <n-button type="primary" size="large" @click="seeOptions"
-              >支持</n-button
-            >
+            <n-button type="primary" size="large" @click="seeOptions">支持</n-button>
             <n-button type="primary" size="large" class="ml-3">关注</n-button>
           </div>
           <div class="flex gap-x-2 items-center">
             <i-uiw-weixin class="w-5 h-5 text-green-500 hover:cursor-pointer" />
-            <i-mdi-link-variant
-              class="w-5 h-5 text-green-500 hover:cursor-pointer"
-            />
+            <i-mdi-link-variant class="w-5 h-5 text-green-500 hover:cursor-pointer" />
           </div>
         </div>
       </div>
@@ -226,11 +204,7 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
           </n-tab-pane>
           <n-tab-pane name="faq" tab="常见问题">
             <n-collapse>
-              <n-collapse-item
-                v-for="item in campaign.faqs"
-                :key="item.id"
-                :name="item.id"
-              >
+              <n-collapse-item v-for="item in campaign.faqs" :key="item.id" :name="item.id">
                 <template #header>
                   <div class="font-bold text-base">
                     {{ item.question }}
@@ -248,12 +222,9 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
           </n-tab-pane>
         </n-tabs>
       </div>
-      <div
-        class="mb-10 overflow-auto md:sticky top-0 md:h-[90vh] md:w-72 lg:w-96 pr-4"
-      >
-        <div
-          class="flex w-full h-[410px] md:block space-x-4 md:space-y-4 md:space-x-0"
-        >
+      <!-- 回报 -->
+      <div class="mb-10 overflow-auto md:sticky top-0 md:h-[90vh] md:w-72 lg:w-96 pr-4">
+        <div class="flex w-full h-[410px] md:block space-x-4 md:space-y-4 md:space-x-0">
           <n-card v-for="item in campaign.perks" :key="item.id" hoverable>
             <div class="border-b mb-4 pb-2">
               <div class="flex justify-between items-center">
@@ -263,9 +234,7 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
                 </p>
               </div>
               <div v-if="item.num !== 0" class="text-xs ml-1">
-                <n-tag type="success" size="small" :bordered="false" round>
-                  限量
-                </n-tag>
+                <n-tag type="success" size="small" :bordered="false" round> 限量 </n-tag>
               </div>
             </div>
             <div class="space-y-2">
@@ -274,12 +243,8 @@ listUpdatesByCampaignId(route.params.id as any).then(res => {
               <div v-if="item.imageUrl">
                 <img :src="item.imageUrl" class="w-full h-28 object-cover" />
               </div>
-              <div class="py-2">
-                预计回报发放时间 {{ splitDate(item.returnDate) }} 内
-              </div>
-              <n-button type="primary" class="w-44" @click="toSupport(item.id)"
-                >去支持</n-button
-              >
+              <div class="py-2">预计回报发放时间 {{ splitDate(item.returnDate) }} 内</div>
+              <n-button type="primary" class="w-44" @click="toSupport(item.id)">去支持</n-button>
             </div>
           </n-card>
         </div>

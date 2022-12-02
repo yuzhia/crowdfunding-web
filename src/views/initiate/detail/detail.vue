@@ -5,19 +5,16 @@ import Story from './Story.vue'
 import { Ref } from 'vue'
 import { UploadFileInfo } from 'naive-ui'
 import { getVideoId } from '@/utils'
+import { REGEXP_YOUTUBE } from '@/common'
 
 const campaign = inject('campaign') as Ref<ICampaign>
 
 const videoLinkList = ref<Array<IAsset>>([])
 const imageLinkList = ref<Array<IAsset>>([])
 
-videoLinkList.value = campaign.value.assets.filter(
-  asset => asset.type == 'VIDEO'
-)
+videoLinkList.value = campaign.value.assets.filter(asset => asset.type == 'VIDEO')
 
-imageLinkList.value = campaign.value.assets.filter(
-  asset => asset.type == 'IMAGE'
-)
+imageLinkList.value = campaign.value.assets.filter(asset => asset.type == 'IMAGE')
 
 const urls = ref<Array<string>>([])
 
@@ -37,9 +34,7 @@ const updateVal = (file: UploadFileInfo) => {
       campaignId: campaign.value.id as number
     })
   } else {
-    imageLinkList.value = imageLinkList.value.filter(
-      item => item.url != file.url
-    )
+    imageLinkList.value = imageLinkList.value.filter(item => item.url != file.url)
   }
 }
 
@@ -47,14 +42,12 @@ watchEffect(() => {
   campaign.value.assets = [...videoLinkList.value, ...imageLinkList.value]
 })
 
-const reg = /(?:https?:\/\/)?(?:www\.)?youtube.*watch\?v=((\w|-){11})(?:\S+)?/
-
 const videoLink = ref('')
 const disabled = ref(true)
 
 const updateVideoInput = () => {
   disabled.value = true
-  const mat = videoLink.value.match(reg)
+  const mat = videoLink.value.match(REGEXP_YOUTUBE)
   if (mat) {
     disabled.value = false
   }
@@ -84,12 +77,7 @@ const removeVideo = (index: number) => {
         你的活动被感兴趣的人发现了，他希望通过下面的内容详细的了解你的活动，千万不要遗漏你的活动最出彩的地方。
       </p>
     </div>
-    <n-form
-      ref="formRef"
-      label-width="auto"
-      require-mark-placement="right-hanging"
-      class="mb-6"
-    >
+    <n-form ref="formRef" label-width="auto" require-mark-placement="right-hanging" class="mb-6">
       <n-form-item path="sources">
         <n-tabs type="line" default-value="video" size="large">
           <!-- 视频 -->
@@ -100,41 +88,26 @@ const removeVideo = (index: number) => {
             </p>
             <div>
               <div class="flex gap-6 mb-2">
-                <n-input
-                  v-model:value="videoLink"
-                  type="text"
-                  @update:value="updateVideoInput"
-                />
-                <n-button :disabled="disabled" @click="addItem"
-                  >添加视频</n-button
-                >
+                <n-input v-model:value="videoLink" type="text" @update:value="updateVideoInput" />
+                <n-button :disabled="disabled" @click="addItem">添加视频</n-button>
               </div>
               <div class="flex flex-wrap gap-2">
-                <div
-                  v-for="(item, index) in videoLinkList"
-                  :key="index"
-                  class="relative"
-                >
+                <div v-for="(item, index) in videoLinkList" :key="index" class="relative">
                   <i-ep-close
                     class="absolute top-0 right-0 w-7 h-7 bg-[#6a6a6a] text-white cursor-pointer"
                     @click="removeVideo(index)"
                   ></i-ep-close>
                   <n-image
-                    :src="`https://i1.ytimg.com/vi/${getVideoId(
-                      item.url
-                    )}/0.jpg`"
+                    :src="`https://i1.ytimg.com/vi/${getVideoId(item.url)}/0.jpg`"
                     width="300"
                     class="h-[200px]"
                     :preview-disabled="true"
                     object-fit="cover"
                   />
                   <div>
-                    <a
-                      class="underline text-[#0EB4b6] text-xs"
-                      :href="item.url"
-                      target="_blank"
-                      >{{ item.url }}</a
-                    >
+                    <a class="underline text-[#0EB4b6] text-xs" :href="item.url" target="_blank">{{
+                      item.url
+                    }}</a>
                   </div>
                 </div>
               </div>

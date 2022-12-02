@@ -111,6 +111,14 @@ export default [
               title: '众筹目标'
             },
             component: () => import('@/views/initiate/goals.vue')
+          },
+          {
+            path: 'rewards',
+            name: 'rewards',
+            meta: {
+              title: '回报'
+            },
+            component: () => import('@/views/initiate/rewards.vue')
           }
         ]
       },
